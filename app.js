@@ -10,6 +10,8 @@ var users = require('./routes/users');
 
 var app = express();
 
+app.io = require('socket.io')();
+
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');
@@ -41,6 +43,55 @@ app.use(function(err, req, res, next) {
   // render the error page
   res.status(err.status || 500);
   res.render('error');
+});
+
+
+
+var ChatRoomHolder = require("./routes/Chat/ChatRoomHolder.js");
+
+var count=1;
+
+/*
+
+
+*/
+app.io.on('connection', function(socket){
+
+//	console.log('user connected: ', socket.id);
+//	var name = "user" + count++;
+
+	//app.io.to(socket.id).emit('welcome', name);
+
+//	console.log('send welcome');
+	
+	/*
+		방 참가
+		파라미터
+			room_id(string) : 방 고유 id
+			TF : 유저가 찬성 측 인지, 반대 측 인지
+		결과
+			없음. 실패의 경우 ChatRoom객체가 실패 메시지를 모냄.
+	*/
+	socket.on('join_room', function(room_id, TF){
+		
+		console.log(room_id);
+		console.log(TF);
+		
+		ChatRoomHolder.test(socket);
+//		ChatRoomHolder.joinRoom(socket, TF);
+	});
+
+	//유저가 접속 종료
+	socket.on('disconnect', function(){
+		console.log('user disconnected: ', socket.id);
+	});
+
+	//유저가 메시지 보냄
+	socket.on('send message', function(name, text){
+		var msg = name + " : " + text;
+		console.log(msg);
+		app.io.emit('receive message', msg);
+	});
 });
 
 module.exports = app;
