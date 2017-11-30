@@ -13,7 +13,25 @@
 
 	<h4>Msg</h4>
 	<input type="text" ng-model="msg"/>
-	<button ng-click="click()">확인</button>
+	<button ng-click="click()">찬</button>
+	<button ng-click="clickd()">반</button>
+
+	<br>
+	<br>
+
+	"찬성 측"<br>
+	<ul>
+		<li ng-repeat="user in true_user">
+			{{ user }}
+		</li>
+	</ul>
+
+	"반대 측"<br>
+	<ul>
+		<li ng-repeat="user in false_user">
+			{{ user }}
+		</li>
+	</ul>
 
   </body>
 </html>

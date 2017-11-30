@@ -4,16 +4,21 @@ class Communicator {
 		this.mDisAgreeUser = [];	// 반대측 유저 (Socket 저장)
 	}
 
-	addSocket(socket, TF){
-		if(TF){
-			this.mAgreeUser.push(socket);
-		}
-		else {
-			this.mDisAgreeUser.push(socket);			
-		}
+	getUserNum(TF){
+		if(TF)
+			return this.mAgreeUser.length;
+		else
+			return this.mDisAgreeUser.length;
 	}
 
-	broadCast(TF ,event, msg){
+	addSocket(socket, TF){
+		if(TF)
+			this.mAgreeUser.push(socket);
+		else
+			this.mDisAgreeUser.push(socket);
+	}
+
+	broadCast(TF ,event, data){
 
 		var array;
 
@@ -23,8 +28,19 @@ class Communicator {
 			array = this.mDisAgreeUser;
 
 		for(var i=0;i<array.length;i++)
-			array[i].emit(event,msg);
-
+			array[i].emit(event,data);
 
 	}
+
+	sendMsg(TF, index, event, data){
+		console.log(event);
+//		console.log(this.mAgreeUser[index]);
+
+		if(TF)
+			this.mAgreeUser[index].emit(event, data);
+		else
+			this.mDisAgreeUser[index].emit(event, data);
+	}
 }
+
+module.exports = Communicator;

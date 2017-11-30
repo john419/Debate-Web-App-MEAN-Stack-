@@ -1,7 +1,8 @@
 'use strict'
 
+var RuleLauncther = require("./Rule/RuleLauncther.js");
 var Rule = require("./Rule/Rule.js");
-var Communicator = require("Communicator.js");
+var Communicator = require("./Communicator.js");
 /* 
 	과거(ES5)에는 CLASS를 이렇게 정의함.
 */
@@ -27,6 +28,7 @@ class ChatRoom{
 		this.mCommunicator = new Communicator();
 
 		this.mRule = new Rule(); //규칙에 대한 정의 Rule 클래스의 객체
+		this.mRuleLauncther = new RuleLauncther(this.mRule, this.mCommunicator);
 	}
 	/*
 		파라미터
@@ -40,52 +42,43 @@ class ChatRoom{
 	*/
 	addUser(socket, TF){
 		
-		if(TF == true){
-			//찬성 측에 추가
-			if(this._CanAddAgreeUser()){
-				// 추가
-				this.mAgreeUser.push(socket);
-				// 모든 유저에게 접속 했다고 알림. 새로 추가된 사람에겐 안보냄
-				// 찬성측
-//				console.log(this.mAgreeUser);
-				for(var i=0; i<this.mAgreeUser.length - 1; i++)
-					this.mAgreeUser[i].emit('other_join_room',this.mAgreeUser.length,true);
+		var data = { };
 
-				//반대측
-				for(var i=0; i<this.mDisAgreeUser.length;i++)
-					this.mDisAgreeUser[i].emit('other_join_room',this.mDisAgreeUser.length,true);
+		console.log("addUser");
+		console.log(this._CanAddUser(TF));
 
-				// 추가된 유저에게 모든 유저 정보를 줌.
-				// 찬성 유저 수, 반대 유저 수, 유저 찬반, 새로 가입된 유저 인덱스
-				console.log("메시지 보냄");
-				socket.emit('result_join', true, this.mAgreeUser.length, this.mDisAgreeUser.length, true, this.mAgreeUser.length);
+		if(this._CanAddUser(TF)){
+			
+			data.user_index = this.mCommunicator.getUserNum(TF);
+			data.user_type = TF;
 
-			} else {
-				// 추가 거부
-				socket.emit('result_join', false);
-			}
+			// 추가
+			this.mCommunicator.broadCast(true,'other_join_room',data);
+			this.mCommunicator.broadCast(false,'other_join_room',data);
+
+			this.mCommunicator.addSocket(socket, TF);
+
+			data.agree_user_num = this.mCommunicator.getUserNum(true);
+			data.dis_agree_user_num = this.mCommunicator.getUserNum(false);
+			data.result = true;
+
+			this.mCommunicator.sendMsg(TF, data.user_index, 'result_join', data);
+
 		} else {
-			//반대 측에 추가
-			if(this._CanAddDisAgreeUser()){
-				//추가
-				this.mDisAgreeUser.push(socket);
-				// 모든 유저에게 접속 했다고 알림. 새로 추가된 사람에겐 안보냄
-				// 찬성측
-				for(var i=0; i<this.mDisAgreeUser.length - 1; i++)
-					this.mDisAgreeUser[i].emit('other_join_room',this.mDisAgreeUser.length,false);
-
-				//반대측
-				for(var i=0; i<this.mAgreeUser.length;i++)
-					this.mAgreeUser[i].emit('other_join_room',this.mDisAgreeUser.length,false);
-
-				// 추가된 유저에게 모든 유저 정보를 줌.
-				// 찬성 유저 수, 반대 유저 수, 새로 가입된 유저 인덱스
-				socket.emit('result_join', true, this.mAgreeUser.length, this.mDisAgreeUser.length, false, this.mDisAgreeUser.length);
-			} else {
-				//추가 거부
-				socket.emit('result_join', false);
-			}
+			// 추가 거부
+			data.result = false;
+			socket.emit('result_join', data);
 		}
+
+		if(this._isMax()){
+			//시작
+			this.mRuleLauncther.start();
+		}
+	}
+	_isMax(){
+		if(this._CanAddUser(false) == false && this._CanAddUser(true) == false)
+			return true;
+		return false;
 	}
 	/*
 		지금 찬성측에 유저를 추가 할 수 있는지
@@ -93,25 +86,11 @@ class ChatRoom{
 		할 수 있으면, true
 		할 수 없으면, false
 	*/
-	_CanAddAgreeUser(){
-		if(this.mAgreeUser.length < this.mRule.getMaxAgreeUserNum()){
+	_CanAddUser(TF){
+		if(this.mCommunicator.getUserNum(TF) < this.mRule.getMaxUserNum(TF))
 			return true;
-		} else {
+		else
 			return false;
-		}
-	}
-	/*
-		지금 반대측에 유저를 추가 할 수 있는지
-		결과
-		할 수 있으면, true
-		할 수 없으면, false
-	*/
-	_CanAddDisAgreeUser(){
-		if(this.mDisAgreeUser.length < this.mRule.getMaxDisAgreeUserNum()){
-			return true;
-		} else {
-			return false;
-		}
 	}
 }
 
