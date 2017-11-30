@@ -3,7 +3,7 @@ var ChatRoom = require("./ChatRoom.js");
 var app = require("../../app.js");
 
 class _ChatRoomHolder {
-	constractor(){
+	constructor(){
 		this.mChatRoomList = [];
 		this.mRoomIndex = 0;
 	}
@@ -17,8 +17,11 @@ class _ChatRoomHolder {
 			방 생성 후, 인덱스 반환
 	*/
 	createRoom(){
+//		console.log("???3");
 		this.mRoomIndex++;
-		this.mChatRoomList[mRoomIndex+""] = new ChatRoom();
+//		console.log("방만들기 : " + this.mRoomIndex);
+		this.mChatRoomList[this.mRoomIndex+""] = new ChatRoom();
+//		console.log(this.mChatRoomList["1"]);
 		return this.mRoomIndex + "";
 	}
 	/*
@@ -32,7 +35,11 @@ class _ChatRoomHolder {
 			없음. 실패의 경우 ChatRoom객체가 실패 메시지를 모냄.
 	*/
 	joinRoom(room_id, socket, TF){
-		this.mChatRoomList[room_id].addUser(socket.TF)
+//		console.log("1");
+//		console.log(this.mChatRoomList[room_id]);
+		if(this.mChatRoomList[room_id] == undefined)
+			socket.emit('reslt_join', false);
+		this.mChatRoomList[room_id].addUser(socket,TF);
 	}
 
 	test(socket){
@@ -40,6 +47,9 @@ class _ChatRoomHolder {
 	}
 }
 
+console.log("???2");
+
 var ChatRoomHolder = new _ChatRoomHolder();
+ChatRoomHolder.createRoom();
 
 module.exports = ChatRoomHolder;

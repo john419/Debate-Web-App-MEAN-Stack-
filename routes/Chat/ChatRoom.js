@@ -1,8 +1,7 @@
 'use strict'
 
 var Rule = require("./Rule/Rule.js");
-var app = require("../../app.js");
-
+var Communicator = require("Communicator.js");
 /* 
 	과거(ES5)에는 CLASS를 이렇게 정의함.
 */
@@ -19,15 +18,15 @@ var app = require("../../app.js");
 /*
 	ES6 부터 지원되는 형식
 */
+
 class ChatRoom{
 	constructor() {
 		this.mRoomID; // 방의 공유 ID(Int)
 		this.mSubject; // 주제(String)
 
-		this.mRule = new Rule(); //규칙에 대한 정의 Rule 클래스의 객체
+		this.mCommunicator = new Communicator();
 
-		this.mAgreeUser = []; //찬성측 유저 (Socket 저장)
-		this.mDisAgreeUser = []; //반대측 유저 (Socket 저장)
+		this.mRule = new Rule(); //규칙에 대한 정의 Rule 클래스의 객체
 	}
 	/*
 		파라미터
@@ -44,25 +43,47 @@ class ChatRoom{
 		if(TF == true){
 			//찬성 측에 추가
 			if(this._CanAddAgreeUser()){
-				this.mAgreeUser.push("abc");
 				// 추가
+				this.mAgreeUser.push(socket);
 				// 모든 유저에게 접속 했다고 알림. 새로 추가된 사람에겐 안보냄
-//				for(i=0; i<this.mAgreeUser.length; i++)
-//					app.io.emit(this.mAgreeUser);
+				// 찬성측
+//				console.log(this.mAgreeUser);
+				for(var i=0; i<this.mAgreeUser.length - 1; i++)
+					this.mAgreeUser[i].emit('other_join_room',this.mAgreeUser.length,true);
 
-				app.io.to(socket.id).emit('welcom',"abc");
+				//반대측
+				for(var i=0; i<this.mDisAgreeUser.length;i++)
+					this.mDisAgreeUser[i].emit('other_join_room',this.mDisAgreeUser.length,true);
 
 				// 추가된 유저에게 모든 유저 정보를 줌.
+				// 찬성 유저 수, 반대 유저 수, 유저 찬반, 새로 가입된 유저 인덱스
+				console.log("메시지 보냄");
+				socket.emit('result_join', true, this.mAgreeUser.length, this.mDisAgreeUser.length, true, this.mAgreeUser.length);
 
 			} else {
-
+				// 추가 거부
+				socket.emit('result_join', false);
 			}
 		} else {
 			//반대 측에 추가
 			if(this._CanAddDisAgreeUser()){
 				//추가
-			} else {
+				this.mDisAgreeUser.push(socket);
+				// 모든 유저에게 접속 했다고 알림. 새로 추가된 사람에겐 안보냄
+				// 찬성측
+				for(var i=0; i<this.mDisAgreeUser.length - 1; i++)
+					this.mDisAgreeUser[i].emit('other_join_room',this.mDisAgreeUser.length,false);
 
+				//반대측
+				for(var i=0; i<this.mAgreeUser.length;i++)
+					this.mAgreeUser[i].emit('other_join_room',this.mDisAgreeUser.length,false);
+
+				// 추가된 유저에게 모든 유저 정보를 줌.
+				// 찬성 유저 수, 반대 유저 수, 새로 가입된 유저 인덱스
+				socket.emit('result_join', true, this.mAgreeUser.length, this.mDisAgreeUser.length, false, this.mDisAgreeUser.length);
+			} else {
+				//추가 거부
+				socket.emit('result_join', false);
 			}
 		}
 	}
