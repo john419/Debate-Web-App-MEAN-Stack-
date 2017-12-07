@@ -7,6 +7,13 @@ var bodyParser = require('body-parser');
 
 var index = require('./routes/index');
 var users = require('./routes/users');
+var main = require('./routes/main');
+var form_receiver = require('./routes/form_receiver');
+var joinRoom = require('./routes/join_room.js');
+
+//var form_receiver = require('./routes/form_receiver');
+var ChatRoomHolder = require("./routes/Chat/ChatRoomHolder.js");
+//var ChatRoomHolderCreate = ChatRoomHolder();
 
 var app = express();
 
@@ -26,7 +33,9 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', index);
 app.use('/users', users);
-
+app.use('/main', main);
+app.use('/form_receiver', form_receiver);
+app.use('/jr', joinRoom);
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
   var err = new Error('Not Found');
@@ -47,7 +56,6 @@ app.use(function(err, req, res, next) {
 
 
 
-var ChatRoomHolder = require("./routes/Chat/ChatRoomHolder.js");
 
 var count=1;
 
@@ -56,14 +64,6 @@ var count=1;
 
 */
 app.io.on('connection', function(socket){
-
-//	console.log('user connected: ', socket.id);
-//	var name = "user" + count++;
-
-	//app.io.to(socket.id).emit('welcome', name);
-
-//	console.log('send welcome');
-	
 	/*
 		방 참가
 		파라미터
@@ -73,12 +73,8 @@ app.io.on('connection', function(socket){
 			없음. 실패의 경우 ChatRoom객체가 실패 메시지를 모냄.
 	*/
 	socket.on('join_room', function(room_id, TF){
-		
-		console.log(room_id);
-		console.log(TF);
-		
-		ChatRoomHolder.test(socket);
-//		ChatRoomHolder.joinRoom(socket, TF);
+		console.log('join');
+		ChatRoomHolder.joinRoom(room_id,socket,TF);
 	});
 
 	//유저가 접속 종료
@@ -87,10 +83,9 @@ app.io.on('connection', function(socket){
 	});
 
 	//유저가 메시지 보냄
-	socket.on('send message', function(name, text){
-		var msg = name + " : " + text;
+	socket.on('send_message', function(room_id, user, type, msg){
 		console.log(msg);
-		app.io.emit('receive message', msg);
+		ChatRoomHolder.getMsg(room_id,user,type,msg);
 	});
 });
 

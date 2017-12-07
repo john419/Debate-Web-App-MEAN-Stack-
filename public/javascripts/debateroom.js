@@ -2,9 +2,12 @@ var app = angular.module('myApp', []);
 app.controller('myCtrl', function($scope){
 
 	var myIndex;
-	var myType;
 
 	$scope.debateChat = "";
+	$scope.teamChat = "";
+
+	$scope.inputTeamChat = "";
+	$scope.inputDebateChat = "";
 
 	$scope.true_user=[];
 	$scope.false_user=[];
@@ -14,6 +17,23 @@ app.controller('myCtrl', function($scope){
 	var socket = io();
 	socket.emit('join_room',roomNum,userType);
 
+	$scope.sendTeamChat = function(){
+		user_data = {
+			index : myIndex,
+			type : userType
+		}
+
+		socket.emit('send_message',roomNum,user_data,'team',$scope.inputTeamChat);
+	}
+
+	$scope.sendDebateChat = function(){
+		user_data = {
+			index : myIndex,
+			type : userType
+		}
+
+		socket.emit('send_message',roomNum,user_data,'debate',$scope.inputDebateChat);
+	}
 
 	socket.on('result_join', function(data){
 
@@ -33,13 +53,12 @@ app.controller('myCtrl', function($scope){
 		if(data.result == true){
 			for(var i=1;i<=data.agree_user_num;i++){
 				$scope.true_user.push("AUser" + i);
-				$scope.$apply();
 			}
 
 			for(var i=1;i<=data.dis_agree_user_num;i++){
 				$scope.false_user.push("DUser" + i);
-				$scope.$apply();
 			}
+			$scope.$apply();
 		}
 	});
 
@@ -56,14 +75,30 @@ app.controller('myCtrl', function($scope){
 		if(data.action === 'start'){
 			$scope.debateChat = "start";
 		} else if(data.action === "speak") {
+			
+			$scope.debateChat = $scope.debateChat + "???" + "\n";
+
 			if(data.user_index == myIndex && data.user_type == myType){
-				$scope.debateChat = $scope.debateChat + "\n" + "my Turn";
+				document.getElementById("inputDebate").disabled = false;
+				document.getElementById("inputDebateBtn").disabled = false;
 			} else {
-				$scope.debateChat = $scope.debateChat + "\n" + "not my Turn";				
+				document.getElementById("inputDebate").disabled = true;
+				document.getElementById("inputDebateBtn").disabled = true;
 			}
 		} else {
-			$scope.debateChat = $scope.debateChat + "\n" + "other";			
+			$scope.debateChat = $scope.debateChat + "other" + "\n" ;
 		}
 
 		$scope.$apply();
-	});})
+	});
+
+	socket.on('team_chat', function(data) {
+		$scope.teamChat = $scope.teamChat + data + "\n" ;
+		$scope.$apply();
+	})
+
+	socket.on('debate_chat', function(data) {
+		$scope.debateChat = $scope.debateChat + data + "\n" ;
+		$scope.$apply();
+	})
+})

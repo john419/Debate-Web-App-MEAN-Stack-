@@ -69,8 +69,8 @@
 
              <textarea class="form-control noresize" id="allChat" ng-model="debateChat" readonly> example </textarea>
 
-             <p><input type="text" disabled>
-             <button type="button" class="btn btn-basic" disabled>보내기</button></p>
+             <p><input type="text" id="inputDebate" ng-model="inputDebateChat" disabled>
+             <button type="button" id="inputDebateBtn" ng-click="sendDebateChat()" class="btn btn-basic" disabled>보내기</button></p>
             
             </div>
           </td>  
@@ -80,10 +80,10 @@
             <div class="panel-heading text-center">팀 채팅</div>
             <div class="panel-body">
 
-             <textarea class="form-control noresize" id="memChat" readonly></textarea>
+             <textarea class="form-control noresize" id="memChat" ng-model = "teamChat" readonly></textarea>
 
-             <p><input type="text">
-             <button type="button" class="btn btn-basic">보내기</button></p>
+             <p><input type="text" ng-model="inputTeamChat">
+             <button type="button" class="btn btn-basic" ng-click="sendTeamChat()">보내기</button></p>
 
             </div>
           </td>
@@ -98,7 +98,7 @@
                 
                 <p>찬성측</p>
                   <ul>
-                  <li ng-repeat="user in true_user">
+                  <li ng-repeat="user in true_user track by $index">
                     {{ user }}
                   </li>
                 </ul>
@@ -106,7 +106,7 @@
 
                 <p>반대측 </p>
                 <ul>
-                  <li ng-repeat="user in false_user">
+                  <li ng-repeat="user in false_user track by $index">
                     {{ user }}
                   </li>
                 </ul>

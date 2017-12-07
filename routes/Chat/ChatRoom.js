@@ -29,6 +29,32 @@ class ChatRoom{
 		this.mRuleLauncther = new RuleLauncther(this.mRule, this.mCommunicator);
 	}
 
+	getMsg(user, type, msg){
+
+		if(type == "debate"){
+			console.log("aa");
+			var sendMsg;
+			if(user.type == true)
+				sendMsg = "AUser";
+			else 
+				sendMsg = "DUser";
+			sendMsg = sendMsg + user.index + " : " + msg;
+
+			this.mCommunicator.broadCast(true,"debate_chat", sendMsg);
+			this.mCommunicator.broadCast(false,"debate_chat", sendMsg);
+		} else if (type == "team"){
+			var sendMsg;
+			if(user.type == true)
+				sendMsg = "AUser";
+			else 
+				sendMsg = "DUser";
+			sendMsg = sendMsg + user.index + " : " + msg;
+
+			this.mCommunicator.broadCast(user.type,"team_chat", sendMsg);
+		} else {
+			console.log('??');
+		}
+	}
 	getSubject(){
 		return this.mSubject;
 	}

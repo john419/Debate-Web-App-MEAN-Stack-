@@ -54,6 +54,10 @@ class _ChatRoomHolder {
 		}
 		return roomList;
 	}
+
+	getMsg(room_id, user, type, msg){
+		this.mChatRoomList[room_id].getMsg(user, type, msg);
+	}
 }
 
 var ChatRoomHolder = new _ChatRoomHolder();

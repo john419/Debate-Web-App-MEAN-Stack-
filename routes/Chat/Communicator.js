@@ -33,9 +33,6 @@ class Communicator {
 	}
 
 	sendMsg(TF, index, event, data){
-		console.log(event);
-//		console.log(this.mAgreeUser[index]);
-
 		if(TF)
 			this.mAgreeUser[index].emit(event, data);
 		else
