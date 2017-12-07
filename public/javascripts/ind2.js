@@ -4,7 +4,7 @@ app.controller('myCtrl', function($scope){
 	$scope.msg="abc";
 	$scope.chatLog="";
 
-	var socket = sessionStorage.getItem('mySocket');
+	var socket = io();
 
 	console.log(socket);
 

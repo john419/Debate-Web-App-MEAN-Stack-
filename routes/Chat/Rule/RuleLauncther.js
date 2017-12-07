@@ -19,38 +19,30 @@ class RuleLauncther {
 		this.mCommunictor.broadCast(true, 'action', data);
 		this.mCommunictor.broadCast(false, 'action', data);
 
-		for(var i=0;i<this.mRule.getRuleSize();i++){
-			chain = chain.then(this.launch(i,this));
-		}
+		launch(0, this.mRule, this.mCommunictor);
 	}
+}
 
-	launch(index, data){
-		console.log("debug");
-		var rule = data.mRule.getRuleInfo(index);
-		console.log("debug");
 
-		var chain2 = Promise.resolve();
+launch = function(index, mRule, mCommunictor){
 
-		if(rule.action === 'speak'){
-			//한 사람이 말함.
-			chain2 = chain2.then(function(){
-				data.speaker_index = rule.user_index;
-				data.speaker_type = rule.user_type;
+	console.log(index);
 
-				data.mCommunictor.broadCast(true, 'action', rule);
-				data.mCommunictor.broadCast(false, 'action', rule);
+	if(mRule.getRuleSize() <= index)
+		return;
 
-			}). then(function(){
-				//특정 시간 동안 기다림
-				console.log(rule.time * 10);
-				setTimeout(function(){ console.log(index); }, (rule.time * 10));
-				while(true){ }
-			});
-		} /*else if (rule.action === 'wait') {
-			//모두 기다 림.
-			this.speaker_index = -1;
-		}*/
-	}
+	console.log(mRule.getRuleSize());
+
+	var rule = mRule.getRuleInfo(index);
+
+	if(rule.action === 'speak'){
+		//한 사람이 말함.
+		
+		mCommunictor.broadCast(true, 'action', rule);
+		mCommunictor.broadCast(false, 'action', rule);
+
+		setTimeout(launch, (rule.time * 10), index + 1, mRule, mCommunictor);
+	} 
 }
 
 module.exports = RuleLauncther;

@@ -16,7 +16,7 @@ class Rule{
 			user_type : true,
 			time : 420
 		}
-		]; //규칙의 정의
+		];
 		this.mMaxAgreeUserNum = 1; //동의 사람 수
 		this.mMaxDisAgreeUserNum = 1; //반대 사람 수
 	}
