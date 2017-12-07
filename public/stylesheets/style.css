@@ -6,3 +6,15 @@ body {
 a {
   color: #00B7FF;
 }
+/*
+* === 문교작성, 상태 패널과(매 페이지 왼쪽) textarea관련 스타일 ===
+*/
+.statpanel {
+	text-align: center;
+	white-space: nowrap;
+}
+
+textarea {
+ 	resize: none; 
+ 	white-space: nowrap;
+}

@@ -54,7 +54,7 @@
             <div class="panel-heading text-center"> 토론 채팅</div>
             <div class="panel-body">
 
-             <textarea class="form-control noresize" id="allChat" ng-model="debateChat" readonly> example </textarea>
+             <textarea class="form-control" id="allChat" ng-model="debateChat" rows=20 cols=25 readonly style="resize: none;"></textarea>
 
              <p><input type="text" id="inputDebate" ng-model="inputDebateChat" disabled>
              <button type="button" id="inputDebateBtn" ng-click="sendDebateChat()" class="btn btn-basic" disabled>보내기</button></p>
@@ -67,7 +67,7 @@
             <div class="panel-heading text-center">팀 채팅</div>
             <div class="panel-body">
 
-             <textarea class="form-control noresize" id="memChat" ng-model = "teamChat" readonly></textarea>
+             <textarea class="form-control" id="memChat" ng-model = "teamChat" rows=20 cols=25 readonly style="resize: none;"></textarea>
 
              <p><input type="text" ng-model="inputTeamChat">
              <button type="button" class="btn btn-basic" ng-click="sendTeamChat()">보내기</button></p>
