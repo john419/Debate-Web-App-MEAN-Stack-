@@ -17,13 +17,8 @@ class _ChatRoomHolder {
 		결과
 			방 생성 후, 인덱스 반환
 	*/
-	createRoom(){
-		this.mRoomIndex++;
-		this.mChatRoomList[this.mRoomIndex+""] = new ChatRoom();
-		return this.mRoomIndex + "";
-	}
-
 	createRoom2(subject, ruleIndex){
+		console.log(ruleIndex);
 		this.mRoomIndex = this.mRoomIndex + 1;
 		this.mChatRoomList[this.mRoomIndex+""] = new ChatRoom(this.mRoomIndex, subject, ruleIndex);
 		return this.mRoomIndex + "";
@@ -44,16 +39,20 @@ class _ChatRoomHolder {
 		this.mChatRoomList[room_id].addUser(socket,TF);
 	}
 
-	getRoomList(){
-		var roomList = new Array();
-		for(var i = 1; i<=this.mRoomIndex; i++){
-			var room = new Object();
-			room.id = i;
-			room.subject = this.mChatRoomList[i].getSubject();
-			roomList.push(room);
-		}
-		return roomList;
-	}
+   getRoomList(){
+      var roomList = new Array();
+      for(var i = 1; i<=this.mRoomIndex; i++){
+         var room = new Object();
+         room.id = i;
+         room.title = this.mChatRoomList[i].mTitle;
+         room.subject = this.mChatRoomList[i].mSubject;
+         room.agreeNum = this.mChatRoomList[i].mCommunicator.getUserNum(true);
+         room.disagreeNum  = this.mChatRoomList[i].mCommunicator.getUserNum(false);
+         
+         roomList.push(room);
+      }
+      return roomList;
+   }
 
 	getMsg(room_id, user, type, msg){
 		this.mChatRoomList[room_id].getMsg(user, type, msg);

@@ -1,5 +1,3 @@
-var arraylist=require('arraylist');
-
 class Rule{
 
 
@@ -14,41 +12,42 @@ class Rule{
       this.mName=""; //규칙의 이름
       this.mMaxAgreeUserNum = 0; //동의 사람 수
       this.mMaxDisAgreeUserNum = 0; //반대 사람 수
-        this.mRule = [] //규칙의 정의
+      this.mRule = [] //규칙의 정의
       this.getRule(index);
       //return this;
    }
 
    getRule(index){
-      switch(index){
+   	
+	switch(index){
 
-         case 0 : this.mName="빠르게 2:2";
-                this.mMaxAgreeUserNum = 2;
-                this.mMaxDisAgreeUserNum = 2;
-                this.mRule=this.setRule(240, 180, 60, 2, 2);
-                break;
+	 case '0' : this.mName="빠르게 2:2";
+	        this.mMaxAgreeUserNum = 2;
+	        this.mMaxDisAgreeUserNum = 2;
+	        this.mRule=this.setRule(240, 180, 60, 2, 2);
+	        break;
 
-         case 1 : this.mName="천천히 2:2";
-                this.mMaxAgreeUserNum = 2;
-                this.mMaxDisAgreeUserNum = 2;
-                this.mRule=this.setRule(420, 300, 120, 2, 2);
+	 case '1' : this.mName="천천히 2:2";
+	        this.mMaxAgreeUserNum = 2;
+	        this.mMaxDisAgreeUserNum = 2;
+	        this.mRule=this.setRule(420, 300, 120, 2, 2);
 
-         case 2 : this.mName="빠르게 4:4";
-                this.mMaxAgreeUserNum = 4;
-                this.mMaxDisAgreeUserNum = 4;
-                this.mRule=this.setRule(240, 180, 60, 4, 4);
+	 case '2' : this.mName="빠르게 4:4";
+	        this.mMaxAgreeUserNum = 4;
+	        this.mMaxDisAgreeUserNum = 4;
+	        this.mRule=this.setRule(240, 180, 60, 4, 4);
 
-         case 3 : this.mName="천천히 4:4";
-                this.mMaxAgreeUserNum = 4;
-                this.mMaxDisAgreeUserNum = 4;
-                this.mRule=this.setRule(420, 300, 180, 4, 4);
-      }
+	 case '3' : this.mName="천천히 4:4";
+	        this.mMaxAgreeUserNum = 4;
+	        this.mMaxDisAgreeUserNum = 4;
+	        this.mRule=this.setRule(420, 300, 180, 4, 4);
+	}
 
    }
 
    setRule(argTime, objectTime, breakTime, agreeNum, disagreeNum){
-      var agreeUser = 0;
-      var disagreeUser = 0;
+      var agreeUser = 1;
+      var disagreeUser = 1;
 
       var speakInfo1 = new Object();
           speakInfo1.action = "speak"; 

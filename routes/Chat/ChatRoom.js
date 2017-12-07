@@ -32,7 +32,6 @@ class ChatRoom{
 	getMsg(user, type, msg){
 
 		if(type == "debate"){
-			console.log("aa");
 			var sendMsg;
 			if(user.type == true)
 				sendMsg = "AUser";
@@ -69,11 +68,8 @@ class ChatRoom{
 			return 자채는 없음.
 	*/
 	addUser(socket, TF){
-		
-		var data = { };
 
-		console.log("addUser");
-		console.log(this._CanAddUser(TF));
+		var data = { };
 
 		if(this._CanAddUser(TF)){
 			

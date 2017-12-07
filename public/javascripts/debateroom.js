@@ -37,8 +37,6 @@ app.controller('myCtrl', function($scope){
 
 	socket.on('result_join', function(data){
 
-		console.log(data);
-
 		if(data.user_type){
 			$scope.my = "A" + $scope.my + data.agree_user_num;
 			myType = data.user_type;
@@ -47,7 +45,7 @@ app.controller('myCtrl', function($scope){
 		else{
 			$scope.my = "D" + $scope.my + data.dis_agree_user_num;
 			myType = data.user_type;
-			myIndex = data.agree_user_num;
+			myIndex = data.dis_agree_user_num;
 		}
 
 		if(data.result == true){
@@ -64,21 +62,30 @@ app.controller('myCtrl', function($scope){
 
 	socket.on('other_join_room', function(data) {
 		if(data.user_type == true)
-			$scope.true_user.push("AUser" + data.user_index);
+			$scope.true_user.push("AUser" + data.user_index + 1);
 		else
-			$scope.false_user.push("DUser" + data.user_index);
+			$scope.false_user.push("DUser" + data.user_index + 1);
 		$scope.$apply();
 	});
 
 	socket.on('action', function(data) {
 		
+		console.log(myIndex);
+
 		if(data.action === 'start'){
-			$scope.debateChat = "start";
+			$scope.debateChat = "start\n";
 		} else if(data.action === "speak") {
 			
-			$scope.debateChat = $scope.debateChat + "???" + "\n";
+			$scope.debateChat = $scope.debateChat + data.name + "\n";
 
-			if(data.user_index == myIndex && data.user_type == myType){
+			if(data.type == true){
+				$scope.debateChat = $scope.debateChat + "AUser" + data.user + "\n";
+			}
+			else{
+				$scope.debateChat = $scope.debateChat + "DUser" + data.user + "\n";
+			}
+
+			if(data.user == myIndex && data.type == myType){
 				document.getElementById("inputDebate").disabled = false;
 				document.getElementById("inputDebateBtn").disabled = false;
 			} else {

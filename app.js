@@ -73,7 +73,6 @@ app.io.on('connection', function(socket){
 			없음. 실패의 경우 ChatRoom객체가 실패 메시지를 모냄.
 	*/
 	socket.on('join_room', function(room_id, TF){
-		console.log('join');
 		ChatRoomHolder.joinRoom(room_id,socket,TF);
 	});
 
@@ -84,7 +83,6 @@ app.io.on('connection', function(socket){
 
 	//유저가 메시지 보냄
 	socket.on('send_message', function(room_id, user, type, msg){
-		console.log(msg);
 		ChatRoomHolder.getMsg(room_id,user,type,msg);
 	});
 });

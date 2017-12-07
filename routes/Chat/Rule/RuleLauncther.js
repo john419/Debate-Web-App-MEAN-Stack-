@@ -41,7 +41,7 @@ launch = function(index, mRule, mCommunictor){
 		mCommunictor.broadCast(true, 'action', rule);
 		mCommunictor.broadCast(false, 'action', rule);
 
-		setTimeout(launch, (rule.time * 1000), index + 1, mRule, mCommunictor);
+		setTimeout(launch, (rule.time * 10), index + 1, mRule, mCommunictor);
 	} 
 }
 
