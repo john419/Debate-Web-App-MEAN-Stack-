@@ -5,13 +5,14 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+  <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.3.14/angular.min.js"></script>
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
-  
-  <link rel="stylesheet" type="text/css" href="mystyle.css">
+  <script type="text/javascript" src="/javascripts/main.js"></script>
+  <!-- <link rel="stylesheet" type="text/css" href="mystyle.css"> -->
 
 </head>
-<body>
+<body ng-app="myApp" ng-controller="myCtrl">
  
 <div class="container">
   <div class="panel-group">
@@ -30,13 +31,13 @@
             첫번째 공간
 
               <div class="panel panel-primary">
-                <div class="panel-heading text-nowrap text-center">
+                <div class="panel-heading text-nowrap text-center"  onclick="window.location.href='/main'">
                   토론방 목록
                 </div>
               </div>
 
               <div class="panel panel-info">
-                <div class="panel-heading text-nowrap text-center">
+                <div class="panel-heading text-nowrap text-center" onclick="window.location.href='/'">
                   방 만들기
                 </div>
               </div>
@@ -65,7 +66,17 @@
             참가가능
             </a>
             </p>
-
+            <% roomlist.forEach(function(roomlist) { %>
+                    <strong ng-model="roomId"> <%= roomlist.id %> </strong>
+                    <form action="jr" method="post">
+                      <input type="hidden" name = "room_id" value='<%= roomlist.id %>'>
+                      <input type="hidden" name = "type" value='false'>
+                      <input type="submit" value="입 장">
+                    </form>
+<!--                     <button ng-click="click('<%= roomlist.id %>')">주제 : <%= roomlist.subject %></button>-->
+                     <br>
+                   <!--  <li><%= roomlist.subject %></li> -->
+                    <% }); %>
 
             <p class="btn-group btn-group-justified">
             <a href="#" class="btn btn-warning">
@@ -74,7 +85,7 @@
             </p>
 
             <p class="btn-group btn-group-justified">
-            <a href="#" class="btn btn-default">
+            <a href="/" class="btn btn-default">
             방 만들기
             </a>
             </p>

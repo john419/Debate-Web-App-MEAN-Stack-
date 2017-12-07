@@ -7,14 +7,17 @@
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
-
-<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.4/angular.min.js"></script>
-
-  <link rel="stylesheet" type="text/css" href="mystyle.css">
-
+  <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.4/angular.min.js"></script>
+  <script src="/socket.io/socket.io.js"></script>
+  <script type="text/javascript" src="/javascripts/debateroom.js"></script>
 </head>
-<body>
- 
+
+<script>
+  var roomNum = <%=room_id%>
+  var userType = <%=type%>
+</script>
+
+<body ng-app="myApp" ng-controller="myCtrl">
 <div class="container">
   <div class="panel-group">
 
@@ -61,23 +64,23 @@
 
           <td>
             <div class="panel panel-danger">
-            <div class="panel-heading text-center">전체 토론 채팅</div>
+            <div class="panel-heading text-center"> 토론 채팅</div>
             <div class="panel-body">
 
-             <textarea class="form-control noresize" id="allChat" readonly>example</textarea>
+             <textarea class="form-control noresize" id="allChat" ng-model="debateChat" readonly> example </textarea>
 
-             <p><input type="text">
-             <button type="button" class="btn btn-basic">보내기</button></p>
+             <p><input type="text" disabled>
+             <button type="button" class="btn btn-basic" disabled>보내기</button></p>
             
             </div>
           </td>  
 
           <td>
             <div class="panel panel-primary">
-            <div class="panel-heading text-center">전체 토론 채팅</div>
+            <div class="panel-heading text-center">팀 채팅</div>
             <div class="panel-body">
 
-             <textarea class="form-control noresize" id="memChat"></textarea>
+             <textarea class="form-control noresize" id="memChat" readonly></textarea>
 
              <p><input type="text">
              <button type="button" class="btn btn-basic">보내기</button></p>
@@ -85,7 +88,7 @@
             </div>
           </td>
 
-          <td>4번째 공간
+          <td> 나 : {{ my }}
 
             <div class="panel panel-info text-nowrap">
               <div class="panel-heading text-center">토론방 정보</div>
@@ -93,11 +96,20 @@
 
                 <p>참여자 명단 </p>
                 
-                <p>관전자 </p>
-                
                 <p>찬성측</p>
-                
+                  <ul>
+                  <li ng-repeat="user in true_user">
+                    {{ user }}
+                  </li>
+                </ul>
+                <br>
+
                 <p>반대측 </p>
+                <ul>
+                  <li ng-repeat="user in false_user">
+                    {{ user }}
+                  </li>
+                </ul>
 
               </div>
             </div>

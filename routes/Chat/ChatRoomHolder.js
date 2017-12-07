@@ -3,6 +3,7 @@ var ChatRoom = require("./ChatRoom.js");
 var app = require("../../app.js");
 
 class _ChatRoomHolder {
+
 	constructor(){
 		this.mChatRoomList = [];
 		this.mRoomIndex = 0;
@@ -17,11 +18,14 @@ class _ChatRoomHolder {
 			방 생성 후, 인덱스 반환
 	*/
 	createRoom(){
-//		console.log("???3");
 		this.mRoomIndex++;
-//		console.log("방만들기 : " + this.mRoomIndex);
 		this.mChatRoomList[this.mRoomIndex+""] = new ChatRoom();
-//		console.log(this.mChatRoomList["1"]);
+		return this.mRoomIndex + "";
+	}
+
+	createRoom2(subject, ruleIndex){
+		this.mRoomIndex = this.mRoomIndex + 1;
+		this.mChatRoomList[this.mRoomIndex+""] = new ChatRoom(this.mRoomIndex, subject, ruleIndex);
 		return this.mRoomIndex + "";
 	}
 	/*
@@ -35,21 +39,23 @@ class _ChatRoomHolder {
 			없음. 실패의 경우 ChatRoom객체가 실패 메시지를 모냄.
 	*/
 	joinRoom(room_id, socket, TF){
-//		console.log("1");
-//		console.log(this.mChatRoomList[room_id]);
 		if(this.mChatRoomList[room_id] == undefined)
 			socket.emit('reslt_join', false);
 		this.mChatRoomList[room_id].addUser(socket,TF);
 	}
 
-	test(socket){
-		socket.emit('welcom',"abc");
+	getRoomList(){
+		var roomList = new Array();
+		for(var i = 1; i<=this.mRoomIndex; i++){
+			var room = new Object();
+			room.id = i;
+			room.subject = this.mChatRoomList[i].getSubject();
+			roomList.push(room);
+		}
+		return roomList;
 	}
 }
 
-console.log("???2");
-
 var ChatRoomHolder = new _ChatRoomHolder();
-ChatRoomHolder.createRoom();
 
 module.exports = ChatRoomHolder;

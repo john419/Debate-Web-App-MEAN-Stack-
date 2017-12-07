@@ -21,14 +21,16 @@ var Communicator = require("./Communicator.js");
 */
 
 class ChatRoom{
-	constructor() {
-		this.mRoomID; // 방의 공유 ID(Int)
-		this.mSubject; // 주제(String)
-
+	constructor(room_id, subject, ruleIndex){
+		this.mRoomID = room_id;
+		this.mSubject = subject;
 		this.mCommunicator = new Communicator();
-
-		this.mRule = new Rule(); //규칙에 대한 정의 Rule 클래스의 객체
+		this.mRule = new Rule(ruleIndex);
 		this.mRuleLauncther = new RuleLauncther(this.mRule, this.mCommunicator);
+	}
+
+	getSubject(){
+		return this.mSubject;
 	}
 	/*
 		파라미터

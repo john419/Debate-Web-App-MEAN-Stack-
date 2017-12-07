@@ -13,7 +13,7 @@ class Rule{
 			action : 'speak',
 			name : '찬성측 입론',
 			user_index : 1,
-			user_type : true,
+			user_type : false,
 			time : 420
 		}
 		];
