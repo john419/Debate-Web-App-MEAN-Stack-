@@ -83,13 +83,13 @@ app.controller('myCtrl', function($scope){
 			$scope.debateChat = $scope.debateChat + data.name + "\n";
 
 			if(data.type == true){
-				$scope.debateChat = $scope.debateChat + "AUser" + data.user + "\n";
+				$scope.debateChat = $scope.debateChat + "AUser" + (Number(data.user) + 1) + "\n";
 			}
 			else{
-				$scope.debateChat = $scope.debateChat + "DUser" + data.user + "\n";
+				$scope.debateChat = $scope.debateChat + "DUser" + (data.user + 1) + "\n";
 			}
 
-			if(data.user == myIndex && data.type == myType){
+			if(data.user + 1 == myIndex && data.type == myType){
 				document.getElementById("inputDebate").disabled = false;
 				document.getElementById("inputDebateBtn").disabled = false;
 			} else {
