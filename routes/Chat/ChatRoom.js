@@ -27,6 +27,19 @@ class ChatRoom{
 		this.mCommunicator = new Communicator();
 		this.mRule = new Rule(ruleIndex);
 		this.mRuleLauncther = new RuleLauncther(this.mRule, this.mCommunicator);
+		this.trueNum = 0;
+		this.falseNum = 0;
+	}
+
+	vote(user, TF){
+		if(TF)
+			this.trueNum++;
+		else
+			this.falseNum++;
+		if(this.trueNum + this.falseNum == this.mCommunicator.getUserNum(true) + this.mCommunicator.getUserNum(false)){
+			this.mCommunicator.broadCast(false,"vote_result", {true : this.trueNum, false : this.falseNum});
+			this.mCommunicator.broadCast(true,"vote_result", {true : this.trueNum, false : this.falseNum});
+		}
 	}
 
 	getMsg(user, type, msg){

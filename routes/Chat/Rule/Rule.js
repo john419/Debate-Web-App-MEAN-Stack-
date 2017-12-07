@@ -45,9 +45,9 @@ class Rule{
 
    }
 
-   setRule(argTime, objectTime, breakTime, agreeNum, disagreeNum){
-      var agreeUser = 1;
-      var disagreeUser = 1;
+setRule(argTime, objectTime, breakTime, agreeNum, disagreeNum){
+      var agreeUser = 0;
+      var disagreeUser = 0;
 
       var speakInfo1 = new Object();
           speakInfo1.action = "speak"; 
@@ -167,6 +167,12 @@ class Rule{
           speakInfo8.time = objectTime;
 
           ruleArr.push(speakInfo8);
+
+      var vote = new Object();
+          vote.action = "vote";
+          vote.name = "결론";
+
+          ruleArr.push(vote);
 
         // speakInfo.type=true;
         // speakInfo.name="최종";

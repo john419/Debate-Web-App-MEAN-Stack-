@@ -85,6 +85,10 @@ app.io.on('connection', function(socket){
 	socket.on('send_message', function(room_id, user, type, msg){
 		ChatRoomHolder.getMsg(room_id,user,type,msg);
 	});
+
+	socket.on('vote', function(room_id,user,TF){
+		ChatRoomHolder.vote(room_id,user,TF);
+	});
 });
 
 module.exports = app;

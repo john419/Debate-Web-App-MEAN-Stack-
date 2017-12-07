@@ -18,7 +18,6 @@ class _ChatRoomHolder {
 			방 생성 후, 인덱스 반환
 	*/
 	createRoom2(subject, ruleIndex){
-		console.log(ruleIndex);
 		this.mRoomIndex = this.mRoomIndex + 1;
 		this.mChatRoomList[this.mRoomIndex+""] = new ChatRoom(this.mRoomIndex, subject, ruleIndex);
 		return this.mRoomIndex + "";
@@ -56,6 +55,10 @@ class _ChatRoomHolder {
 
 	getMsg(room_id, user, type, msg){
 		this.mChatRoomList[room_id].getMsg(user, type, msg);
+	}
+
+	vote(room_id, user, TF){
+		this.mChatRoomList[room_id].vote(user, TF);
 	}
 }
 
