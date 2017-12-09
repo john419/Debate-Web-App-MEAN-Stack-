@@ -36,14 +36,14 @@ launch = function(index, mRule, mCommunictor){
 		mCommunictor.broadCast(true, 'action', rule);
 		mCommunictor.broadCast(false, 'action', rule);
 
-		setTimeout(launch, (rule.time * 10), index + 1, mRule, mCommunictor);
+		setTimeout(launch, (rule.time * 1000), index + 1, mRule, mCommunictor);
 	} else if(rule.action === 'wait'){
 		//한 사람이 말함.
 		
 		mCommunictor.broadCast(true, 'action', rule);
 		mCommunictor.broadCast(false, 'action', rule);
 
-		setTimeout(launch, (rule.time * 10), index + 1, mRule, mCommunictor);
+		setTimeout(launch, (rule.time * 1000), index + 1, mRule, mCommunictor);
 	} else if (rule.action === 'vote'){
 
 		mCommunictor.broadCast(true, 'action', rule);
